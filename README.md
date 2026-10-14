@@ -5,18 +5,18 @@ Atividade prática inicial da aula 1 da disciplina Microcontroladores 2 (PSI).
 Registre sua evolução utilizando os checklists abaixo por meio de commits com mensagens descritivas:
 
 ### Setup (individual)
-- [ ] Possuo VSCode instalado
-- [ ] Possuo MCUXpresso instalado
-- [ ] Possuo PlatformIO instalado
-- [ ] Possuo cabo USB compatível com Placa Freedom
-- [ ] Possuo Placa Freedom operacional
-- [ ] Possuo Zephyr atualizado para versão 4.2
+- [X] Possuo VSCode instalado
+- [X] Possuo MCUXpresso instalado
+- [X] Possuo PlatformIO instalado
+- [X] Possuo cabo USB compatível com Placa Freedom
+- [X] Possuo Placa Freedom operacional
+- [X] Possuo Zephyr atualizado para versão 4.2
 
 Materiais para consulta: https://frdm-kl25z-com-zephyr-rtos.super.site/instalao, https://frdm-kl25z-com-zephyr-rtos.super.site/tutoriais/1-exemplo-pisca-led-rtos/atualizao-para-o-zephyr-42
 
 ### Atividade Baremetal (implementação individual, validação em dupla)
-- [ ] Crie uma branch chamada baremetal
-- [ ] Compile e execute o exemplo de piscar led baremetal na placa Freedom com o Zephyr versão 4.2 (vide [https://frdm-kl25z-com-zephyr-rtos.super.site/tutoriais/2-pisca-led-simples](https://frdm-kl25z-com-zephyr-rtos.super.site/tutoriais/1-exemplo-pisca-led-rtos/atualizao-para-o-zephyr-42)). Dica: Utilize por enquanto somente o led da placa
+- [X] Crie uma branch chamada baremetal
+- [X] Compile e execute o exemplo de piscar led baremetal na placa Freedom com o Zephyr versão 4.2 (vide [https://frdm-kl25z-com-zephyr-rtos.super.site/tutoriais/2-pisca-led-simples](https://frdm-kl25z-com-zephyr-rtos.super.site/tutoriais/1-exemplo-pisca-led-rtos/atualizao-para-o-zephyr-42)). Dica: Utilize por enquanto somente o led da placa
 - [ ] Faça alterações no código para controlar dois leds: um led deve piscar a cada segundo, e o segundo led deve piscar a cada meio segundo
 - [ ] Desafio: tente fazer com que o primeiro led pisque a cada segundo, e o segundo led pisque a cada 350 ms
 - [ ] Crie um planejamento de testes para verificação do correto funcionamento, detalhando quais são os resultados esperados
