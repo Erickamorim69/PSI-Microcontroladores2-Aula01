@@ -36,7 +36,7 @@ void main(void)
     }
 
     // Configura o pino como saída
-    ret = gpio_pin_configure_dt(&led0, GPIO_OUTPUT_ACTIVE);
+    ret = gpio_pin_configure_dt(&led0, GPIO_OUTPUT_INACTIVE);
     if (ret < 0) {
         printk("Error %d: failed to configure LED pin\n", ret);
         return;
@@ -50,26 +50,41 @@ void main(void)
 
     printk("Blinking LED0 (%s pin %d) and LED1 (%s pin %d)\n", 
            led0.port->name, led0.pin, led1.port->name, led1.pin);
-    gpio_pin_toggle_dt(&led0); // fazer o led 0 iniciar desligado
-    uint32_t step = 0;
-    while (1) {
-// LED1 alterna o estado a cada passo (500 ms)
-        gpio_pin_toggle_dt(&led1);
+    void ligarVERDE(){
+        gpio_pin_set_dt(&led0, 1);
+    }
+    void desligarVERDE(){
+        gpio_pin_set_dt(&led0, 0);
+    }
+    void ligarAZUL(){
+        gpio_pin_set_dt(&led1, 1);
+    }
+    void desligarAZUL(){
+        gpio_pin_set_dt(&led1, 0);
+    }
+
+    void piscarVERDE(){
+        ligarVERDE();
         k_msleep(10);
-        gpio_pin_toggle_dt(&led1);
+        desligarVERDE();
+    }
 
-        // LED0 alterna o estado a cada dois passos (2 * 500 ms = 1000 ms)
-        if (step % 2 == 0) {
-            gpio_pin_toggle_dt(&led0);
-            k_msleep(10);
-            gpio_pin_toggle_dt(&led0);
+    void piscarAZUL(){
+        ligarAZUL();
+        k_msleep(10);
+        desligarAZUL();
+    }
+    uint32_t tempo = 0;
+
+    while (1) {
+
+        if(tempo % 1000 == 0){
+            piscarVERDE();
         }
-
-        step++;
-
-        // Atraso de tempo base
-        k_msleep(500);
-
-
+        if(tempo%350 == 0){
+            piscarAZUL();
+        }
+        k_msleep(1);
+        tempo ++;
     }
 }
