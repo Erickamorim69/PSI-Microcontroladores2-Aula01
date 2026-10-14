@@ -1,6 +1,11 @@
-*
-
-
-!src/main.c
-!PSI-Microcontroladores2-Aula01/README.md
-!.gitignore
+# Ignorar pastas de compilação e configurações do VS Code
+.vscode/
+.pio/
+.include/
+.lib/
+.test/
+.zephyr/
+platagormio.ini
+*.exe
+*.o
+*.out
