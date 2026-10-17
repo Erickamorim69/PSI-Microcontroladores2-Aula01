@@ -50,19 +50,24 @@ void main(void)
         return;
     }
 
-    int cont = 0;
+    int cont = 0; // Inicializa variavel para contagem
+    // Condição: um led a cada 1s e outro a cada 350ms
+    // o contador soma a cada 50ms. Logo, quando chega em algum múltiplo
+    // de 7, ele altera um led, e quando chega no múltiplo de 20,
+    // altera do outro led (350ms e 1000ms).
 
     while (1) {
+        cont++;
 
-        gpio_pin_toggle_dt(&ledv);
-
-        if(cont == 2){
-            gpio_pin_toggle_dt(&ledb);
-            cont = 0;
+        if(cont % 7 == 0){
+            gpio_pin_toggle_dt(&ledv);
         }
 
-        cont++;
-        k_msleep(500);
+        if(cont % 20 == 0){
+            gpio_pin_toggle_dt(&ledb);
+        }
+
+        k_msleep(50);
 
     }
 }
