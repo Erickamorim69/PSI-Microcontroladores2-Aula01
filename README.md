@@ -4,6 +4,8 @@ Atividade prática inicial da aula 1 da disciplina Microcontroladores 2 (PSI).
 
 Registre sua evolução utilizando os checklists abaixo por meio de commits com mensagens descritivas:
 
+AS MARCAÇÕES POR ALGUM MOTIVO NÃO ESTÃO APARECENDO NO GITHUB, MAS ESTOU DEIXANDO MARCADO E SE FOR NECESSÁRIO FAÇO UPLOAD DE UMA PRINT
+
 ### Setup (individual)
 - [x] Possuo VSCode instalado
 - [x] Possuo MCUXpresso instalado
@@ -17,7 +19,7 @@ Materiais para consulta: https://frdm-kl25z-com-zephyr-rtos.super.site/instalao,
 ### Atividade Baremetal (implementação individual, validação em dupla)
 - [x] Crie uma branch chamada baremetal
 - [x] Compile e execute o exemplo de piscar led baremetal na placa Freedom com o Zephyr versão 4.2 (vide [https://frdm-kl25z-com-zephyr-rtos.super.site/tutoriais/2-pisca-led-simples](https://frdm-kl25z-com-zephyr-rtos.super.site/tutoriais/1-exemplo-pisca-led-rtos/atualizao-para-o-zephyr-42)). Dica: Utilize por enquanto somente o led da placa
-- [ ] Faça alterações no código para controlar dois leds: um led deve piscar a cada segundo, e o segundo led deve piscar a cada meio segundo
+- [x] Faça alterações no código para controlar dois leds: um led deve piscar a cada segundo, e o segundo led deve piscar a cada meio segundo
 - [ ] Desafio: tente fazer com que o primeiro led pisque a cada segundo, e o segundo led pisque a cada 350 ms
 - [ ] Crie um planejamento de testes para verificação do correto funcionamento, detalhando quais são os resultados esperados
 - [ ] Abra uma Pull Request
