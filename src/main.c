@@ -31,6 +31,10 @@ void thread_ledv() {
         gpio_pin_set_dt(&ledv, 0);
         k_msleep(950);
     }
+    /* Se somar o tempo total dos 2 msleep, o led pisca a cada 1000ms
+     * como solicitado pelo exercício. O ciclo tem o tempo correto.
+     * idem para a outra thread.
+     */
 }
 
 K_THREAD_DEFINE(thread_verde, STACK_SIZE, thread_ledv,
