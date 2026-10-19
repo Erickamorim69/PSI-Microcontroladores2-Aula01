@@ -4,6 +4,10 @@
 
 #define SLEEP_TIME_MS 500
 
+// Configurações da pilha (stack) e prioridade da Thread
+#define STACKSIZE 1024
+#define PRIORITY 7
+
 // Define o LED usando Device Tree
 #define LED0_NODE DT_ALIAS(led0)
 
@@ -14,7 +18,8 @@ static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
 #error "Unsupported board: led0 devicetree alias is not defined"
 #endif
 
-void main(void)
+// Função de entrada da Thread (substitui o loop direto na main)
+void led_thread_entry(void *p1, void *p2, void *p3)
 {
     int ret;
 
@@ -31,11 +36,20 @@ void main(void)
         return;
     }
 
-    printk("LED blinking on %s pin %d\n", led.port->name, led.pin);
+    printk("LED blinking on %s pin %d (via Thread)\n", led.port->name, led.pin);
 
     while (1) {
-        // Toggle do LED usando a nova API
+        // Toggle do LED usando a APo Zeph
         gpio_pin_toggle_dt(&led);
         k_msleep(SLEEP_TIME_MS);
     }
+}
+
+// Cria e inicia a Thread automaticamente no boot do sistema
+K_THREAD_DEFINE(led_thread_id, STACKSIZE, led_thread_entry, NULL, NULL, NULL, PRIORITY, 0, 0);
+
+int main(void)
+{
+    printk("led piscadno\n");
+    return 0;
 }
