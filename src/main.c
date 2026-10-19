@@ -42,7 +42,7 @@ void thread_ledb() {
         gpio_pin_set_dt(&ledb, 1);
         k_msleep(50);
         gpio_pin_set_dt(&ledb, 0);
-        k_msleep(450);
+        k_msleep(300);
     }
 }
 
@@ -51,21 +51,27 @@ K_THREAD_DEFINE(thread_azul, STACK_SIZE, thread_ledb,
                 PRIORITY, 0, 0);
 
 int main(void){
+
+    /* A função main somente inicializa os pinos dos leds e garante
+     * que estejam funcionando, inclusive usando um return 1.
+     */
+
 	int ret;
 
 	if (!gpio_is_ready_dt(&ledv) || !gpio_is_ready_dt(&ledb)) {
 		return 0;
 	}
 
-	ret = gpio_pin_configure_dt(&ledv, GPIO_OUTPUT_ACTIVE);
+    // GPIO INACTIVE para o led inicializar em 0
+	ret = gpio_pin_configure_dt(&ledv, GPIO_OUTPUT_INACTIVE);
 	if (ret < 0) {
 		return 0;
 	}
 
-    ret = gpio_pin_configure_dt(&ledb, GPIO_OUTPUT_ACTIVE);
+    ret = gpio_pin_configure_dt(&ledb, GPIO_OUTPUT_INACTIVE);
 	if (ret < 0) {
 		return 0;
 	}
 
-    return 1;
+    return 0;
 }
