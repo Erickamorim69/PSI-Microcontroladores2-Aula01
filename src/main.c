@@ -53,7 +53,7 @@ K_THREAD_DEFINE(thread_azul, STACK_SIZE, thread_ledb,
 int main(void){
 
     /* A função main somente inicializa os pinos dos leds e garante
-     * que estejam funcionando, inclusive usando um return 1.
+     * que estejam funcionando.
      */
 
 	int ret;
