@@ -66,7 +66,7 @@ void led1_thread_entry(void *p1, void *p2, void *p3)
         gpio_pin_set_dt(&led1, 1);
         k_msleep(10);
         gpio_pin_set_dt(&led1, 0);
-        k_msleep(500); // 1 segundo
+        k_msleep(350); 
     }
 }
 
