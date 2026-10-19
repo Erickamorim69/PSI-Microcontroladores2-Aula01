@@ -26,8 +26,10 @@ static const struct gpio_dt_spec ledb = GPIO_DT_SPEC_GET(LED1_NODE, gpios);
 
 void thread_ledv() {
     while (1) {
-        gpio_pin_toggle_dt(&ledv);
-        k_msleep(1000);
+        gpio_pin_set_dt(&ledv, 1);
+        k_msleep(50);
+        gpio_pin_set_dt(&ledv, 0);
+        k_msleep(950);
     }
 }
 
@@ -37,8 +39,10 @@ K_THREAD_DEFINE(thread_verde, STACK_SIZE, thread_ledv,
 
 void thread_ledb() {
     while (1) {
-        gpio_pin_toggle_dt(&ledb);
-        k_msleep(500);
+        gpio_pin_set_dt(&ledb, 1);
+        k_msleep(50);
+        gpio_pin_set_dt(&ledb, 0);
+        k_msleep(450);
     }
 }
 
