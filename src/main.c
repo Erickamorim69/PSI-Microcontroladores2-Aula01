@@ -4,87 +4,52 @@
 
 #define SLEEP_TIME_MS 500
 
+// Configurações da pilha (stack) e prioridade da Thread
+#define STACKSIZE 1024
+#define PRIORITY 7
+
 // Define o LED usando Device Tree
 #define LED0_NODE DT_ALIAS(led0)
-#define LED1_NODE DT_ALIAS(led1)
 
 // Verifica se o LED está definido no Device Tree
 #if DT_NODE_HAS_STATUS(LED0_NODE, okay)
-static const struct gpio_dt_spec led0 = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
+static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
 #else
 #error "Unsupported board: led0 devicetree alias is not defined"
 #endif
 
-#if DT_NODE_HAS_STATUS(LED1_NODE, okay)
-static const struct gpio_dt_spec led1 = GPIO_DT_SPEC_GET(LED1_NODE, gpios);
-#else
-#error "Unsupported board: led1 devicetree alias is not defined"
-#endif
-
-void main(void)
+// Função de entrada da Thread (substitui o loop direto na main)
+void led_thread_entry(void *p1, void *p2, void *p3)
 {
     int ret;
 
     // Verifica se o device está pronto
-    if (!gpio_is_ready_dt(&led0)) {
-        printk("Error: LED device %s is not ready\n", led0.port->name);
-        return;
-    }
-    if (!gpio_is_ready_dt(&led1)) {
-        printk("Error: LED1 device %s is not ready\n", led1.port->name);
+    if (!gpio_is_ready_dt(&led)) {
+        printk("Error: LED device %s is not ready\n", led.port->name);
         return;
     }
 
     // Configura o pino como saída
-    ret = gpio_pin_configure_dt(&led0, GPIO_OUTPUT_INACTIVE);
+    ret = gpio_pin_configure_dt(&led, GPIO_OUTPUT_ACTIVE);
     if (ret < 0) {
         printk("Error %d: failed to configure LED pin\n", ret);
         return;
     }
 
-    ret = gpio_pin_configure_dt(&led1, GPIO_OUTPUT_INACTIVE);
-    if (ret < 0) {
-        printk("Error %d: failed to configure LED1 pin\n", ret);
-        return;
-    }
-
-    printk("Blinking LED0 (%s pin %d) and LED1 (%s pin %d)\n", 
-           led0.port->name, led0.pin, led1.port->name, led1.pin);
-    void ligarVERDE(){
-        gpio_pin_set_dt(&led0, 1);
-    }
-    void desligarVERDE(){
-        gpio_pin_set_dt(&led0, 0);
-    }
-    void ligarAZUL(){
-        gpio_pin_set_dt(&led1, 1);
-    }
-    void desligarAZUL(){
-        gpio_pin_set_dt(&led1, 0);
-    }
-
-    void piscarVERDE(){
-        ligarVERDE();
-        k_msleep(10);
-        desligarVERDE();
-    }
-
-    void piscarAZUL(){
-        ligarAZUL();
-        k_msleep(10);
-        desligarAZUL();
-    }
-    uint32_t tempo = 0;
+    printk("LED blinking on %s pin %d (via Thread)\n", led.port->name, led.pin);
 
     while (1) {
-
-        if(tempo % 1000 == 0){
-            piscarVERDE();
-        }
-        if(tempo%350 == 0){
-            piscarAZUL();
-        }
-        k_msleep(1);
-        tempo ++;
+        // Toggle do LED usando a API do Zephyr
+        gpio_pin_toggle_dt(&led);
+        k_msleep(SLEEP_TIME_MS);
     }
+}
+
+// Cria e inicia a Thread automaticamente no boot do sistema
+K_THREAD_DEFINE(led_thread_id, STACKSIZE, led_thread_entry, NULL, NULL, NULL, PRIORITY, 0, 0);
+
+int main(void)
+{
+    printk("Aplicação iniciada! Thread do LED rodando em segundo plano.\n");
+    return 0;
 }
