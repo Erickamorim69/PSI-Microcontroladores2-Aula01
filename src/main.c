@@ -60,14 +60,16 @@ void main(void)
         cont++;
 
         if(cont % 7 == 0){
-            gpio_pin_toggle_dt(&ledv);
+            gpio_pin_set_dt(&ledv, 1);
         }
 
         if(cont % 20 == 0){
-            gpio_pin_toggle_dt(&ledb);
+            gpio_pin_set_dt(&ledb, 1);
         }
 
         k_msleep(50);
+        gpio_pin_set_dt(&ledv, 0);
+        gpio_pin_set_dt(&ledb, 0);
 
     }
 }
