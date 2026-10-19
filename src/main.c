@@ -1,81 +1,75 @@
-/*
- * Copyright (c) 2016 Intel Corporation
- *
- * SPDX-License-Identifier: Apache-2.0
- */
-
-#include <stdio.h>
 #include <zephyr/kernel.h>
+#include <zephyr/device.h>
 #include <zephyr/drivers/gpio.h>
 
-#define STACK_SIZE 1024
-#define PRIORITY 5
+// Define o LED usando Device Tree
+#define LED0_NODE DT_ALIAS(led0)
+#define LED1_NODE DT_ALIAS(led1)
 
-/* The devicetree node identifier for the "led0" alias. */
-#define LED0_NODE DT_ALIAS(led0) // LED Verde
-
-/* The devicetree node identifier for the "led1" alias. */
-#define LED1_NODE DT_ALIAS(led1) // LED Azul
-
-/*
- * A build error on this line means your board is unsupported.
- * See the sample documentation for information on how to fix this.
- */
+// Verifica se o LED está definido no Device Tree
+#if DT_NODE_HAS_STATUS(LED0_NODE, okay)
 static const struct gpio_dt_spec ledv = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
-static const struct gpio_dt_spec ledb = GPIO_DT_SPEC_GET(LED1_NODE, gpios);
+#else
+#error "Unsupported board: led0 devicetree alias is not defined"
+#endif 
 
-void thread_ledv() {
+// Verifica se o LED está definido no Device Tree
+#if DT_NODE_HAS_STATUS(LED1_NODE, okay)
+static const struct gpio_dt_spec ledb = GPIO_DT_SPEC_GET(LED1_NODE, gpios);
+#else
+#error "Unsupported board: led1 devicetree alias is not defined"
+#endif
+
+void main(void)
+{
+    int ret;
+
+    // Verifica se o device está pronto
+    if (!gpio_is_ready_dt(&ledv)) {
+        printk("Error: LED device %s is not ready\n", ledv.port->name);
+        return;
+    }
+
+    // Configura o pino como saída
+    ret = gpio_pin_configure_dt(&ledv, GPIO_OUTPUT_ACTIVE);
+    if (ret < 0) {
+        printk("Error %d: failed to configure LED pin\n", ret);
+        return;
+    }
+
+    // Verifica se o device está pronto
+    if (!gpio_is_ready_dt(&ledb)) {
+        printk("Error: LED device %s is not ready\n", ledv.port->name);
+        return;
+    }
+
+    // Configura o pino como saída
+    ret = gpio_pin_configure_dt(&ledb, GPIO_OUTPUT_ACTIVE);
+    if (ret < 0) {
+        printk("Error %d: failed to configure LED pin\n", ret);
+        return;
+    }
+
+    int cont = 0; // Inicializa variavel para contagem
+    // Condição: um led a cada 1s e outro a cada 350ms
+    // o contador soma a cada 50ms. Logo, quando chega em algum múltiplo
+    // de 7, ele altera um led, e quando chega no múltiplo de 20,
+    // altera do outro led (350ms e 1000ms).
+
     while (1) {
-        gpio_pin_set_dt(&ledv, 1);
+        cont++;
+
+        if(cont % 7 == 0){
+            gpio_pin_set_dt(&ledv, 1);
+        }
+
+        if(cont % 20 == 0){
+            gpio_pin_set_dt(&ledb, 1);
+        }
+
         k_msleep(50);
         gpio_pin_set_dt(&ledv, 0);
-        k_msleep(950);
-    }
-    /* Se somar o tempo total dos 2 msleep, o led pisca a cada 1000ms
-     * como solicitado pelo exercício. O ciclo tem o tempo correto.
-     * idem para a outra thread.
-     */
-}
-
-K_THREAD_DEFINE(thread_verde, STACK_SIZE, thread_ledv,
-                NULL, NULL, NULL,
-                PRIORITY, 0, 0);
-
-void thread_ledb() {
-    while (1) {
-        gpio_pin_set_dt(&ledb, 1);
-        k_msleep(50);
         gpio_pin_set_dt(&ledb, 0);
-        k_msleep(300);
+
     }
-}
-
-K_THREAD_DEFINE(thread_azul, STACK_SIZE, thread_ledb,
-                NULL, NULL, NULL,
-                PRIORITY, 0, 0);
-
-int main(void){
-
-    /* A função main somente inicializa os pinos dos leds e garante
-     * que estejam funcionando.
-     */
-
-	int ret;
-
-	if (!gpio_is_ready_dt(&ledv) || !gpio_is_ready_dt(&ledb)) {
-		return 0;
-	}
-
-    // GPIO INACTIVE para o led inicializar em 0
-	ret = gpio_pin_configure_dt(&ledv, GPIO_OUTPUT_INACTIVE);
-	if (ret < 0) {
-		return 0;
-	}
-
-    ret = gpio_pin_configure_dt(&ledb, GPIO_OUTPUT_INACTIVE);
-	if (ret < 0) {
-		return 0;
-	}
-
-    return 0;
 }
