@@ -1,1 +1,0 @@
-garantir que um led pisque a cada 1 segundo e o outro pisque a cada 500 ms
